@@ -8,7 +8,7 @@ namespace PRG2_ASSG
 {
     public class Terminal
     {
-        private string terminalName;
+        private string terminalName = "Changi Airport Terminal 5";
         private Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
         private Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
         private Dictionary<string, BoardingGate> boardingGates = new Dictionary<string, BoardingGate>();
@@ -16,7 +16,7 @@ namespace PRG2_ASSG
         private Dictionary<string, Airline> airlines1;
 
         public string TerminalName { get; set; }
-        public Dictionary<string, Airline> Airlines { get ; set ; }
+        public Dictionary<string, Airline> Airlines { get; set; }
         public Dictionary<string, Flight> Flights { get; set; }
         public Dictionary<string, BoardingGate> BoardingGates { get; set; }
         public Dictionary<string, double> GateFees { get; set; }
@@ -54,3 +54,4 @@ namespace PRG2_ASSG
             return null;
         }
     }
+}

@@ -22,10 +22,15 @@ namespace PRG2_ASSG
 
         public bool SupportsLWTT { get; set; }
 
-        public Flight AssignedFlight
+        public Flight AssignedFlight{ get; set; }
+
+        public BoardingGate(string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
         {
-            get { return assignedFlight; }
-            set { assignedFlight = value; }
+            GateName = gateName;
+            SupportsCFFT = supportsCFFT;
+            SupportsDDJB = supportsDDJB;
+            SupportsLWTT = supportsLWTT;
+
         }
 
         public double CalculateFees()

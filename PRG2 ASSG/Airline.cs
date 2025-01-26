@@ -18,6 +18,12 @@ namespace PRG2_ASSG
 
         public Dictionary<string, Flight> Flights { get; }
 
+        public Airline(string name, string code)
+        {
+            Name = name;
+            Code = code;
+        }
+
         public bool AddFlight(Flight flight)
         {
             if (!Flights.ContainsKey(flight.FlightNumber))
