@@ -40,7 +40,9 @@ namespace PRG2_ASSG
 
         public override string ToString()
         {
-            return $"Gate {GateName}: {(AssignedFlight != null ? AssignedFlight.FlightNumber : "Unassigned")}";
+            return $"Gate {GateName}: CFFT({SupportsCFFT}), DDJB({SupportsDDJB}), LWTT({SupportsLWTT})";
         }
+
+
     }
 }

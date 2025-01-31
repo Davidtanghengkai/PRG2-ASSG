@@ -1,57 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PRG2_ASSG;
 
-namespace PRG2_ASSG
+public class Terminal
 {
-    public class Terminal
+    // Initialize airlines and boarding gates dictionaries in constructor
+    public Terminal()
     {
-        private string terminalName = "Changi Airport Terminal 5";
-        private Dictionary<string, Airline> airlines = new Dictionary<string, Airline>();
-        private Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
-        private Dictionary<string, BoardingGate> boardingGates = new Dictionary<string, BoardingGate>();
-        private Dictionary<string, double> gateFees = new Dictionary<string, double>();
-        private Dictionary<string, Airline> airlines1;
+        Airlines = new Dictionary<string, Airline>();
+        BoardingGates = new Dictionary<string, BoardingGate>();
+    }
 
-        public string TerminalName { get; set; }
-        public Dictionary<string, Airline> Airlines { get; set; }
-        public Dictionary<string, Flight> Flights { get; set; }
-        public Dictionary<string, BoardingGate> BoardingGates { get; set; }
-        public Dictionary<string, double> GateFees { get; set; }
+    private string terminalName = "Changi Airport Terminal 5";
+    private Dictionary<string, Airline> airlines; // Will be initialized in constructor
+    private Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
+    private Dictionary<string, BoardingGate> boardingGates; // Will be initialized in constructor
+    private Dictionary<string, double> gateFees = new Dictionary<string, double>();
 
+    public string TerminalName { get; set; }
+    public Dictionary<string, Airline> Airlines { get; set; } // Initialized in constructor
+    public Dictionary<string, BoardingGate> BoardingGates { get; set; } // Initialized in constructor
 
-        public bool AddAirline(Airline airline)
+    public bool AddAirline(Airline airline)
+    {
+        if (!Airlines.ContainsKey(airline.Code))
         {
-            if (!Airlines.ContainsKey(airline.Code))
-            {
-                Airlines[airline.Code] = airline;
-                return true;
-            }
-            return false;
+            Airlines[airline.Code] = airline;
+            return true;
         }
+        return false;
+    }
 
-        public bool AddBoardingGate(BoardingGate gate)
+    public bool AddBoardingGate(BoardingGate gate)
+    {
+        if (!BoardingGates.ContainsKey(gate.GateName))
         {
-            if (!BoardingGates.ContainsKey(gate.GateName))
-            {
-                BoardingGates[gate.GateName] = gate;
-                return true;
-            }
-            return false;
+            BoardingGates[gate.GateName] = gate;
+            return true;
         }
+        return false;
+    }
 
-        public Airline GetAirlineFromFlight(Flight flight)
+    public Airline GetAirlineFromFlight(Flight flight)
+    {
+        foreach (var airline in Airlines.Values)
         {
-            foreach (var airline in Airlines.Values)
+            if (airline.Flights.ContainsKey(flight.FlightNumber))
             {
-                if (airline.Flights.ContainsKey(flight.FlightNumber))
-                {
-                    return airline;
-                }
+                return airline;
             }
-            return null;
         }
+        return null;
     }
 }

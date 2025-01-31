@@ -37,7 +37,7 @@ namespace PRG2_ASSG
 
         public override string ToString()
         {
-            return $"Flight {FlightNumber}: {Origin} -> {Destination}, Time: {ExpectedTime}, Status: {Status}";
+            return $"Flight {FlightNumber}, Origin {Origin}, Destination {Destination}, Time {ExpectedTime}, Status {Status}";
         }
     }
 
@@ -64,4 +64,4 @@ namespace PRG2_ASSG
 
 
 }
-}
+

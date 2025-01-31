@@ -1,57 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PRG2_ASSG;
 
-namespace PRG2_ASSG
+public class Airline
 {
-    public class Airline
+    public string Name { get; set; }
+    public string Code { get; set; }
+    public Dictionary<string, Flight> Flights { get; set; } = new Dictionary<string, Flight>();
+
+    public Airline(string name, string code)
     {
-        private string code;
-        private Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
-        private string name;
+        Name = name;
+        Code = code;
+    }
 
-        public string Name { get; set; }
-
-        public string Code { get; set; }
-
-        public Dictionary<string, Flight> Flights { get; }
-
-        public Airline(string name, string code)
+    public bool AddFlight(Flight flight)
+    {
+        if (!Flights.ContainsKey(flight.FlightNumber))
         {
-            Name = name;
-            Code = code;
+            Flights[flight.FlightNumber] = flight;
+            return true;
         }
+        return false;
+    }
 
-        public bool AddFlight(Flight flight)
-        {
-            if (!Flights.ContainsKey(flight.FlightNumber))
-            {
-                Flights[flight.FlightNumber] = flight;
-                return true;
-            }
-            return false;
-        }
+    public bool RemoveFlight(Flight flight)
+    {
+        return Flights.Remove(flight.FlightNumber);
+    }
 
-        public bool RemoveFlight(Flight flight)
+    public double CalculateFees()
+    {
+        double totalFees = 0;
+        foreach (var flight in Flights.Values)
         {
-            return Flights.Remove(flight.FlightNumber);
+            totalFees += flight.CalculateFees();
         }
+        return totalFees;
+    }
 
-        public double CalculateFees()
-        {
-            double totalFees = 0;
-            foreach (var flight in Flights.Values)
-            {
-                totalFees += flight.CalculateFees();
-            }
-            return totalFees;
-        }
-
-        public override string ToString()
-        {
-            return $"Airline {Name} ({Code}), Flights: {Flights.Count}";
-        }
+    public override string ToString()
+    {
+        return $"Airline {Name} ({Code}), Flights: {Flights.Count}";
     }
 }
