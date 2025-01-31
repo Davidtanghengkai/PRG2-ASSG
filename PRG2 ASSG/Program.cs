@@ -21,40 +21,38 @@ class program
 
 //Feature #1
 static void LoadFiles()
-    {
+{
         
-        List<Airline> Airplanelist = new List<Airline>();
-        using (StreamReader sr = new StreamReader("airlines.csv"))
+    List<Airline> Airplanelist = new List<Airline>();
+    using (StreamReader sr = new StreamReader("airlines.csv"))
+    {
+        string s = sr.ReadLine();
+
+        while ((s = sr.ReadLine()) != null)
         {
-            string s = sr.ReadLine();
-
-            while ((s = sr.ReadLine()) != null)
-            {
-                string[] airplane = s.Split(',');
-                Airline a = new Airline(airplane[0], airplane[1]);
-                terminal.AddAirline(a);
-                Airplanelist.Add(new Airline(airplane[0], airplane[1]));
-
-            }
+            string[] airplane = s.Split(',');
+            Airline a = new Airline(airplane[0], airplane[1]);
+            terminal.AddAirline(a);
+            Airplanelist.Add(new Airline(airplane[0], airplane[1]));
 
         }
 
-        List<BoardingGate> BoardingGateList = new List<BoardingGate>();
-        using (StreamReader sr = new StreamReader("boardinggates.csv"))
-        {
-            string x = sr.ReadLine();
-
-            while ((x = sr.ReadLine()) != null)
-            {
-                string[] gateperm = x.Split(',');
-                BoardingGate b = new BoardingGate(gateperm[0], Convert.ToBoolean(gateperm[1]), Convert.ToBoolean(gateperm[2]), Convert.ToBoolean(gateperm[3]));
-                terminal.AddBoardingGate(b);
-
-                BoardingGateList.Add(new BoardingGate(gateperm[0], Convert.ToBoolean(gateperm[1]), Convert.ToBoolean(gateperm[2]), Convert.ToBoolean(gateperm[3])));
-            }
-
-        }
     }
+
+    List<BoardingGate> BoardingGateList = new List<BoardingGate>();
+    using (StreamReader sr = new StreamReader("boardinggates.csv"))
+    {
+        string x = sr.ReadLine();
+        while ((x = sr.ReadLine()) != null)
+        {
+            string[] gateperm = x.Split(',');
+            BoardingGate b = new BoardingGate(gateperm[0], Convert.ToBoolean(gateperm[1]), Convert.ToBoolean(gateperm[2]), Convert.ToBoolean(gateperm[3]));
+            terminal.AddBoardingGate(b);
+            BoardingGateList.Add(new BoardingGate(gateperm[0], Convert.ToBoolean(gateperm[1]), Convert.ToBoolean(gateperm[2]), Convert.ToBoolean(gateperm[3])));
+        }
+
+     }
+}
 
 //Feature #2
 static void LoadFlights()
@@ -106,63 +104,61 @@ static void ListFlights()
 
         Console.WriteLine($"{"Gate Name",-20} {"DDJB",-15} {"CFFT",-10} {"LWTT",-5}");
 
-        // Access the boardingGates from the terminal object (which is already initialized)
         foreach (var gate in terminal.BoardingGates.Values)
         {
-            // For each gate, print the details along with the assigned flight number (if any)
             Console.WriteLine($"{gate.GateName,-20} {gate.SupportsDDJB,-15} {gate.SupportsCFFT,-10} {gate.SupportsLWTT,-5}");
         }
     }
 //Feature #5
 static void AssignGate()
 {
-    // Step 1: Prompt the user for the Flight Number
+
     Console.WriteLine("Enter the Flight Number:");
     string flightNumber = Console.ReadLine().Trim();
 
-    // Step 2: Check if the flight exists
+
     if (!terminal.Flights.ContainsKey(flightNumber))
     {
         Console.WriteLine("Flight not found. Please try again.");
         return;
     }
     Flight selectedFlight = terminal.Flights[flightNumber];
-    // Display basic information of the selected flight
+
     Console.WriteLine("\nSelected Flight Details:");
     Console.WriteLine($"Flight Number: {selectedFlight.FlightNumber}");
     Console.WriteLine($"Origin: {selectedFlight.Origin}");
     Console.WriteLine($"Destination: {selectedFlight.Destination}");
     Console.WriteLine($"Expected Time: {selectedFlight.ExpectedTime.ToString("h:mm tt")}");
     Console.WriteLine($"Status: {selectedFlight.Status}");
-    // Step 3: Prompt the user for the Boarding Gate
+
     string gateName;
     while (true)
     {
         Console.WriteLine("\nEnter the Boarding Gate:");
         gateName = Console.ReadLine().Trim();
 
-        // Step 4: Check if the boarding gate exists
+
         if (!terminal.BoardingGates.ContainsKey(gateName))
         {
             Console.WriteLine("Boarding Gate not found. Please try again.");
             continue;
         }
         BoardingGate selectedGate = terminal.BoardingGates[gateName];
-        // Check if the boarding gate is already assigned to another flight
+ 
         if (selectedGate.AssignedFlight != null)
         {
             Console.WriteLine($"Boarding Gate {gateName} is already assigned to Flight {selectedGate.AssignedFlight.FlightNumber}. Please choose another gate.");
             continue;
         }
-        // Step 5: Assign the boarding gate to the flight
+
         selectedGate.AssignedFlight = selectedFlight;
         break;
     }
-    // Step 6: Display the selected flight and boarding gate
+
     Console.WriteLine("\nAssignment Details:");
     Console.WriteLine($"Flight Number: {selectedFlight.FlightNumber}");
     Console.WriteLine($"Boarding Gate: {gateName}");
-    // Step 7: Prompt the user to update the flight status
+  
     Console.WriteLine("\nWould you like to update the status of the flight? [Y/N]");
     string updateStatus = Console.ReadLine().Trim().ToUpper();
     if (updateStatus == "Y")
@@ -281,4 +277,34 @@ static void CreateFlight()
     
 }
 
+// Feature #9
+static void DisplayScheduledFlights()
+{
+    
+    var sortedFlights = terminal.Flights.Values.OrderBy(flight => flight.ExpectedTime).ToList();
+
+    Console.WriteLine("=============================================");
+    Console.WriteLine("Scheduled Flights (Ordered by Earliest First)");
+    Console.WriteLine("=============================================");
+    Console.WriteLine($"{"Flight Number",-15} {"Airline",-20} {"Origin",-20} {"Destination",-20} {"Expected Time",-15} {"Status",-10} {"Special Request",-15} {"Boarding Gate",-15}");
+    Console.WriteLine(new string('-', 120));
+
+   
+    foreach (var flight in sortedFlights)
+    {
+        string airlineCode = flight.FlightNumber.Substring(0, 2);
+        string airlineName = terminal.Airlines.ContainsKey(airlineCode) ? terminal.Airlines[airlineCode].AirlineName : "Unknown Airline";
+        string boardingGate = "N/A";
+        foreach (var gate in terminal.BoardingGates.Values)
+        {
+            if (gate.AssignedFlight != null && gate.AssignedFlight.FlightNumber == flight.FlightNumber)
+            {
+                boardingGate = gate.GateName;
+                break;
+            }
+        }
+
+        Console.WriteLine($"{flight.FlightNumber,-15} {airlineName,-20} {flight.Origin,-20} {flight.Destination,-20} {flight.ExpectedTime.ToString("h:mm tt"),-15} {flight.Status,-10} {flight.SpecialRequestCode ?? "N/A",-15} {boardingGate,-15}");
+    }
+}
 
