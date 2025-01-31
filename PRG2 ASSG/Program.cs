@@ -2,8 +2,6 @@
 using PRG2_ASSG;
 
 
-
-
 class program
 {
     static Terminal terminal = new Terminal();
@@ -21,8 +19,8 @@ class program
 
 
 
-
-    static void LoadFiles()
+//Feature #1
+static void LoadFiles()
     {
         
         List<Airline> Airplanelist = new List<Airline>();
@@ -58,8 +56,44 @@ class program
         }
     }
 
+//Feature #2
+static void LoadFlights()
+{
+    Dictionary<string, Flight> flights = new Dictionary<string, Flight>();
+    try
+    {
+        using (StreamReader reader = new StreamReader("flights.csv"))
+        {
+            string headerLine = reader.ReadLine(); 
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                string[] values = line.Split(',');
+
+                if (values.Length >= 5)
+                {
+                    string flightNumber = values[0].Trim();
+                    string origin = values[1].Trim();
+                    string destination = values[2].Trim();
+                    string timeString = values[3].Trim();
+                    string status = values[4].Trim();
+
+                    if (DateTime.TryParseExact(timeString, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expectedTime))
+                    {
+                        Flight flight = new Flight(flightNumber, origin, destination, status, expectedTime);
+                        flights[flightNumber] = flight; 
+                    }
+                }
+            }
+        }
+    }
+}
 
 
+
+
+
+//Feature #4
     static void ListAllBoardingGates()
     {
         Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================");
