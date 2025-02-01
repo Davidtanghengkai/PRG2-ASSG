@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PRG2_ASSG
 {
-    public class Flight
+    public abstract class Flight
     {
         // Properties
         public string FlightNumber { get; set; }

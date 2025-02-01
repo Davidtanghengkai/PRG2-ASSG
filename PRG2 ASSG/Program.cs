@@ -321,7 +321,7 @@ namespace PRG2_ASSG
                 newFlight = new CFFTFlight(flightNumber, origin, destination, expectedTime, specialRequestCode);
                 break;
             default:
-                newFlight = new Flight(flightNumber, origin, destination, expectedTime, specialRequestCode);
+                newFlight = new NORMFlight(flightNumber, origin, destination, expectedTime, specialRequestCode);
                 break;
         }
 
@@ -369,7 +369,7 @@ namespace PRG2_ASSG
             {
                 if (airline.FlightNumber.Substring(0,2) == code)
                 {
-                    Console.WriteLine(airline);
+                    Console.WriteLine($"{airline.FlightNumber,-25} {airline.Origin,-20} {airline.Destination,-15} {airline.ExpectedTime,-10} {airline.Status,-5}");
                 }
             }
         }
