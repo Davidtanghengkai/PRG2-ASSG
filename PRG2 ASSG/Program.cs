@@ -140,11 +140,11 @@ namespace PRG2_ASSG
         static void ListFlights()
         {
             Console.WriteLine("=============================================\r\nList of Flights\r\n=============================================");
-            Console.WriteLine($"{"Flight Number",-15} {"Origin",-15} {"Destination",-15} {"Expected Time",-15} {"Status",-10}");
+            Console.WriteLine($"{"Flight Number",-25} {"Origin",-20} {"Destination",-15} {"Expected Time",-10} {"Status",-3}");
 
             foreach (var flight in terminal.Flights.Values)
             {
-                Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-15} {flight.Destination,-15} {flight.ExpectedTime.ToString("h:mm tt"),-15} {flight.Status,-10}");
+                Console.WriteLine($"{flight.FlightNumber,-25} {flight.Origin,-20} {flight.Destination,-15} {flight.ExpectedTime.ToString("h:mm tt"),-10} {flight.Status,-5}");
             }
         }
 
@@ -253,7 +253,7 @@ namespace PRG2_ASSG
             }
         }
 
- static void CreateFlight()
+         static void CreateFlight()
 {
     while (true)
     {
@@ -360,17 +360,23 @@ namespace PRG2_ASSG
 
         static void ListAirlines()
         {
-            Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================\r\nAirline Code Airline Name\r\nSQ Singapore Airlines\r\nMH Malaysia Airlines\r\nJL Japan Airlines\r\nCX Cathay Pacific\r\nQF Qantas Airways\r\nTR AirAsia\r\nEK Emirates\r\nBA British Airways\r\nEnter Airline Code: SQ\r\n=============================================\r\nList of Flights for Singapore Airlines\r\n=============================================");
-            string code = Console.ReadLine();
+            Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================\r\nAirline Code Airline Name\r\nSQ Singapore Airlines\r\nMH Malaysia Airlines\r\nJL Japan Airlines\r\nCX Cathay Pacific\r\nQF Qantas Airways\r\nTR AirAsia\r\nEK Emirates\r\nBA British Airways\r\nEnter Airline Code: ");
+            string code = Console.ReadLine(); 
+            Console.WriteLine($"\r\n=============================================\r\nList of Flights for {terminal.Airlines[code]}\r\n=============================================");
             Console.WriteLine($"{"Flight Number",-25} {"Airline Name",-20} {"Origin",-15} {"Destination",-10} {"Expected",-5}");
 
-            foreach (var airline in terminal.Airlines.Values)
+            foreach (var airline in terminal.Flights.Values)
             {
-                if (airline.Code == code)
+                if (airline.FlightNumber.Substring(0,2) == code)
                 {
                     Console.WriteLine(airline);
                 }
             }
+        }
+
+        static  void ModifyFlightDetails()
+        {
+            Console.WriteLine("undone");
         }
 
         static void DisplayScheduledFlights()
