@@ -605,7 +605,7 @@ namespace PRG2_ASSG
             {
                 string airlineCode = flight.FlightNumber.Substring(0, 2);
                 string airlineName = terminal.Airlines.ContainsKey(airlineCode) ? terminal.Airlines[airlineCode].Name : "Unknown Airline";
-                string boardingGate = "N/A";
+                string boardingGate = "Unassigned";
 
                 foreach (var gate in terminal.BoardingGates.Values)
                 {
