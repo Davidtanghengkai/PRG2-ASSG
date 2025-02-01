@@ -671,12 +671,10 @@ namespace PRG2_ASSG
             int unassigned = 0;
             int total = terminal.Flights.Count;
             Queue<Flight> unassignedFlights = new Queue<Flight>();
-            List<BoardingGate> boardedgates = new List<BoardingGate>;
+            Dictionary<Flight,string> printall = new Dictionary<Flight, string>();
+            List<BoardingGate> boardedgates = new List<BoardingGate>();
 
             // Separate assigned and unassigned flights
-
-
-
 
             foreach (var flight in terminal.Flights.Values)
             {
@@ -688,6 +686,8 @@ namespace PRG2_ASSG
                         if (board.Flight == flight)
                         {
                             counter= true;
+                            boardedgates.Add(board);
+                            printall.Add(flight,board.GateName);
 
                         }
     
@@ -700,26 +700,83 @@ namespace PRG2_ASSG
                 }
             }
 
-            foreach (var flight in unassignedFlights)
+            for (int i = 0; i < unassignedFlights.Count; i++)
             {
-                Console.WriteLine(flight.Status);
+                var flight = unassignedFlights.Dequeue();              
+                
                 if (flight.Status == "CFFT")
                 {
-
                     foreach (var item in terminal.BoardingGates.Values)
                     {
                         if (boardedgates.Contains(item) == false)
                         {
                             if (item.SupportsCFFT == true)
                             {
+                                item.Flight = flight;
+                                boardedgates.Add(item);
 
+                                try { printall.Add(flight, item.GateName); }
+                                catch { }
                             }
                         }
-                        Console.WriteLine(item);
+                        
+                    }
+                }
+                else if (flight.Status == "LWTT")
+                {
+                    foreach (var item in terminal.BoardingGates.Values)
+                    {
+                        if (boardedgates.Contains(item) == false)
+                        {
+                            if (item.SupportsLWTT == true)
+                            {
+                                item.Flight = flight;
+                                boardedgates.Add(item);
+                                try { printall.Add(flight, item.GateName); }
+                                catch { }
+                            }
+                        }
+                    }
+                }
+                else if (flight.Status == "DDJB")
+                {
+                    foreach (var item in terminal.BoardingGates.Values)
+                    {
+                        if (boardedgates.Contains(item) == false)
+                        {
+                            if (item.SupportsDDJB == true)
+                            {
+                                item.Flight = flight;
+                                boardedgates.Add(item);
+                                try { printall.Add(flight, item.GateName); }
+                                catch { }
+                                
+                            }
+                        }
+                    }
+                }
+                else if (flight.Status == "NORM")
+                {
+                    foreach (var item in terminal.BoardingGates.Values)
+                    {
+                        if (boardedgates.Contains(item) == false)
+                        {
+                            item.Flight = flight;
+                            boardedgates.Add(item);
+                            try { printall.Add(flight, item.GateName); }
+                            catch { }
+                        }
                     }
                 }
 
+
+                Console.WriteLine($"{flight} {printall[flight]}");
+
             }
+
+            
+
+
         }
 
     }
