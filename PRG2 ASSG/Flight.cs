@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PRG2_ASSG
 {
@@ -12,7 +13,7 @@ namespace PRG2_ASSG
         public string Status { get; set; }
 
         // Constructor to initialize the properties
-        public Flight(string flightNumber, string origin, string destination, string status, DateTime expectedTime)
+        public Flight(string flightNumber, string origin, string destination,DateTime expectedTime, string status )
         {
             FlightNumber = flightNumber;
             Origin = origin;

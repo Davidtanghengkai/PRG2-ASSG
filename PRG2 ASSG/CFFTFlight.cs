@@ -11,11 +11,11 @@ namespace PRG2_ASSG
         private double fees;
 
         public double Fees { get; set; }
-        public CFFTFlight(string FlightNumber, string Origin, string Destination, string Status, DateTime ExpectedTime) : base(FlightNumber, Origin, Destination, Status, ExpectedTime)
+        public CFFTFlight(string FlightNumber, string Origin, string Destination, DateTime ExpectedTime, string Status) : base(FlightNumber, Origin, Destination,ExpectedTime, Status)
         {
             Fees = 150;
         }
-        public virtual double CalculateFees()
+        public override double CalculateFees()
         {
             if (Origin == "Singapore")
             {

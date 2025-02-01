@@ -1,4 +1,5 @@
-﻿using PRG2_ASSG;
+﻿using System.ComponentModel.DataAnnotations;
+using PRG2_ASSG;
 
 public class Terminal
 {

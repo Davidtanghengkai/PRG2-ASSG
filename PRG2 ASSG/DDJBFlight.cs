@@ -12,11 +12,11 @@ namespace PRG2_ASSG
 
         public double Fees { get; set; }
         
-        public DDJBFlight(string FlightNumber, string Origin, string Destination, string Status, DateTime ExpectedTime) : base(FlightNumber, Origin, Destination, Status, ExpectedTime)
+        public DDJBFlight(string FlightNumber, string Origin, string Destination, DateTime ExpectedTime, string Status) : base(FlightNumber, Origin, Destination, ExpectedTime, Status)
         {
             Fees = 300;
         }
-        public virtual double CalculateFees()
+        public override double CalculateFees()
         {
             if (Origin == "Singapore")
             {

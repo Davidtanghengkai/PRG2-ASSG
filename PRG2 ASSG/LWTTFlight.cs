@@ -11,11 +11,11 @@ namespace PRG2_ASSG
         private double fees = 500;
 
         public double Fees { get; set; }
-        public LWTTFlight(string FlightNumber, string Origin, string Destination, string Status, DateTime ExpectedTime) : base(FlightNumber, Origin, Destination, Status, ExpectedTime)
+        public LWTTFlight(string FlightNumber, string Origin, string Destination, DateTime ExpectedTime, string Status) : base(FlightNumber, Origin, Destination, ExpectedTime, Status)
         {
             Fees = 500;
         }
-        public virtual double CalculateFees()
+        public override double CalculateFees()
         {
             if (Origin == "Singapore")
             {
