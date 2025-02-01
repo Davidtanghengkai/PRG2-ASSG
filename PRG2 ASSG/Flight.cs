@@ -17,7 +17,7 @@ namespace PRG2_ASSG
         {
             FlightNumber = flightNumber;
             Origin = origin;
-            Destination = destination;
+            Destination = destination;  
             Status = status;
             ExpectedTime = expectedTime;
         }
