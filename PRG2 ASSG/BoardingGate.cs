@@ -23,6 +23,7 @@ namespace PRG2_ASSG
         public bool SupportsLWTT { get; set; }
 
         public Flight AssignedFlight{ get; set; }
+        public Flight Flight { get; set; }
 
         public BoardingGate(string gateName, bool supportsCFFT, bool supportsDDJB, bool supportsLWTT)
         {
