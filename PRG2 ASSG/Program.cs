@@ -40,7 +40,7 @@ namespace PRG2_ASSG
                 }
             }
         }
-
+        //F1/2 DONE
         static void LoadFiles()
         {
             try
@@ -105,22 +105,22 @@ namespace PRG2_ASSG
                         {
                             if (Flights.Length == 4)
                             {
-                                NORMFlight c = new NORMFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime(Flights[3]), "No code");
+                                NORMFlight c = new NORMFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime($"{DateTime.Today.ToString("yyyy-MM-dd")} {Flights[3]}"), null);
                                 terminal.AddFlight(c);
                             }
                             else if (Flights[Flights.Length - 1] == "LWTT")
                             {
-                                LWTTFlight c = new LWTTFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime(Flights[3]), "LWTT");
+                                LWTTFlight c = new LWTTFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime($"{DateTime.Today.ToString("yyyy-MM-dd")} {Flights[3]}"), "LWTT");
                                 terminal.AddFlight(c);
                             }
                             else if (Flights[Flights.Length - 1] == "CFFT")
                             {
-                                CFFTFlight c = new CFFTFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime(Flights[3]), "CFFT");
+                                CFFTFlight c = new CFFTFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime($"{DateTime.Today.ToString("yyyy-MM-dd")} {Flights[3]}"), "CFFT");
                                 terminal.AddFlight(c);
                             }
                             else if (Flights[Flights.Length - 1] == "DDJB")
                             {
-                                DDJBFlight c = new DDJBFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime(Flights[3]), "DDJB");
+                                DDJBFlight c = new DDJBFlight(Flights[0], Flights[1], Flights[2], Convert.ToDateTime($"{DateTime.Today.ToString("yyyy-MM-dd")} {Flights[3]}"), "DDJB");
                                 terminal.AddFlight(c);
                             }
                         }
@@ -136,18 +136,19 @@ namespace PRG2_ASSG
                 Console.WriteLine($"Error reading file: {ex.Message}");
             }
         }
-
+        //F3 DONE
         static void ListFlights()
         {
             Console.WriteLine("=============================================\r\nList of Flights\r\n=============================================");
-            Console.WriteLine($"{"Flight Number",-25} {"Origin",-20} {"Destination",-15} {"Expected Time",-10} {"Status",-3}");
+            Console.WriteLine($"{"Flight Number",-15} {"Airline Name",-25} {"Origin",-20} {"Destination",-20} {"Expected Departure",-5}");
 
             foreach (var flight in terminal.Flights.Values)
             {
-                Console.WriteLine($"{flight.FlightNumber,-25} {flight.Origin,-20} {flight.Destination,-15} {flight.ExpectedTime.ToString("h:mm tt"),-10} {flight.Status,-5}");
+                string Datenow = flight.ExpectedTime.ToString("dd / MM / yyyy h: mm tt");
+                Console.WriteLine($"{flight.FlightNumber,-15} {terminal.Airlines[flight.FlightNumber.Substring(0, 2)].Name,-25} {flight.Origin,-20} {flight.Destination,-20} {Datenow, -5}");
             }
         }
-
+        //F4 DONE
         static void ListAllBoardingGates()
         {
             Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================");
@@ -158,7 +159,7 @@ namespace PRG2_ASSG
                 Console.WriteLine($"{gate.GateName,-20} {gate.SupportsDDJB,-15} {gate.SupportsCFFT,-10} {gate.SupportsLWTT,-5}");
             }
         }
-
+        //F5 DONE
         static void AssignGate()
         {
             int retryCount = 0;
@@ -258,7 +259,7 @@ namespace PRG2_ASSG
     while (true)
     {
         // Input Flight Details
-        Console.WriteLine("\nEnter the Flight Number:");
+        Console.Write("\nEnter the Flight Number: ");
         string flightNumber = Console.ReadLine().Trim();
         if (string.IsNullOrEmpty(flightNumber))
         {
@@ -273,7 +274,7 @@ namespace PRG2_ASSG
             continue;
         }
 
-        Console.WriteLine("Enter the Origin:");
+        Console.Write("Enter the Origin: ");
         string origin = Console.ReadLine().Trim();
         if (string.IsNullOrEmpty(origin))
         {
@@ -281,7 +282,7 @@ namespace PRG2_ASSG
             continue;
         }
 
-        Console.WriteLine("Enter the Destination:");
+        Console.Write ("Enter the Destination: ");
         string destination = Console.ReadLine().Trim();
         if (string.IsNullOrEmpty(destination))
         {
@@ -289,16 +290,18 @@ namespace PRG2_ASSG
             continue;
         }
 
-        Console.WriteLine("Enter the Expected Departure/Arrival Time (e.g., 10:00 AM):");
+        Console.Write("Enter the Expected Departure/Arrival Time (e.g., 10:00 AM):  ");
         string timeString = Console.ReadLine().Trim();
-        if (!DateTime.TryParseExact(timeString, "h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expectedTime))
-        {
-            Console.WriteLine("Invalid time format. Please try again.");
-            continue;
-        }
+                if (!DateTime.TryParseExact(timeString, "dd/MM/yyyy h:mm tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expectedTime))
+                {
+                    Console.WriteLine("Invalid date and time format. Please try again.");
+                    continue;
+                }
 
-        // Handle Special Request Code
-        Console.WriteLine("Would you like to enter a Special Request Code? [Y/N]");
+
+
+                // Handle Special Request Code
+                Console.WriteLine("Would you like to enter a Special Request Code? [Y/N]");
         string addSpecialRequest = Console.ReadLine().Trim().ToUpper();
         string specialRequestCode = "No code";
         if (addSpecialRequest == "Y")
@@ -333,7 +336,7 @@ namespace PRG2_ASSG
         {
             using (StreamWriter writer = new StreamWriter("flights.csv", true))
             {
-                string flightLine = $"{flightNumber},{origin},{destination},{expectedTime.ToString("h:mm tt")},On Time";
+                string flightLine = $"{flightNumber},{origin},{destination},{expectedTime.ToString("h:mm tt")}";
                 if (specialRequestCode != "No code")
                 {
                     flightLine += $",{specialRequestCode}";
@@ -349,7 +352,7 @@ namespace PRG2_ASSG
         // Ask to Add Another Flight
         Console.WriteLine("\nWould you like to add another flight? [Y/N]");
         string addAnother = Console.ReadLine().Trim().ToUpper();
-        if (addAnother != "Y")
+        if (addAnother == "N")
         {
             break;
         }
@@ -362,14 +365,14 @@ namespace PRG2_ASSG
         {
             Console.WriteLine("=============================================\r\nList of Airlines for Changi Airport Terminal 5\r\n=============================================\r\nAirline Code Airline Name\r\nSQ Singapore Airlines\r\nMH Malaysia Airlines\r\nJL Japan Airlines\r\nCX Cathay Pacific\r\nQF Qantas Airways\r\nTR AirAsia\r\nEK Emirates\r\nBA British Airways\r\nEnter Airline Code: ");
             string code = Console.ReadLine();
-            Console.WriteLine($"\r\n=============================================\r\nList of Flights for {terminal.Airlines[code]}\r\n=============================================");
-            Console.WriteLine($"{"Flight Number",-25} {"Airline Name",-20} {"Origin",-15} {"Destination",-10} {"Expected",-5}");
+            Console.WriteLine($"\r\n=============================================\r\nList of Flights for {terminal.Airlines[code].Name}\r\n=============================================");
+            Console.WriteLine($"{"Flight Number",-25} {"Airline Name",-20} {"Origin",-15} {"Destination",-15} {"Expected",-5}");
 
             foreach (var airline in terminal.Flights.Values)
             {
                 if (airline.FlightNumber.Substring(0,2) == code)
                 {
-                    Console.WriteLine($"{airline.FlightNumber,-25} {airline.Origin,-20} {airline.Destination,-15} {airline.ExpectedTime,-10} {airline.Status,-5}");
+                    Console.WriteLine($"{airline.FlightNumber,-25} {terminal.Airlines[airline.FlightNumber.Substring(0,2)].Name,-20} {airline.Origin,-15} {airline.Destination,-15} {airline.ExpectedTime,-5} ");
                 }
             }
         }
@@ -386,29 +389,36 @@ namespace PRG2_ASSG
 
             string airlineCode;
             // Input validation for airline code
-            while (true)
-            {
-                Console.Write("Enter Airline Code: ");
-                airlineCode = Console.ReadLine().ToUpper();
-                if (string.IsNullOrEmpty(airlineCode) || !terminal.Airlines.ContainsKey(airlineCode))
-                {
-                    Console.WriteLine("Invalid Airline Code. Please try again.");
-                }
-                else
-                {
-                    break;
-                }
-            }
-
+            
+            Console.Write("Enter Airline Code: ");
+            airlineCode = Console.ReadLine().Trim().ToUpper();
             Airline selectedAirline = terminal.Airlines[airlineCode];
             Console.WriteLine($"=============================================\r\nList of Flights for {selectedAirline.Name}\r\n=============================================");
             Console.WriteLine($"{"Flight Number",-15} {"Origin",-15} {"Destination",-15} {"Expected Departure/Arrival Time",-30}");
+            foreach (var airline in terminal.Flights.Values)
+                {
+                    if (airline.FlightNumber.Substring(0, 2) == airlineCode)
+                    {
+                        Console.WriteLine($"{airline.FlightNumber,-25} {airline.Origin,-20} {airline.Destination,-15} {airline.ExpectedTime,-10} {airline.Status,-5}");
+                        
+                    }
+                    
+                }
+                
+            
+
+            
 
             // List flights for the selected airline
-            foreach (var flight in terminal.Flights.Values.Where(f => terminal.GetAirlineFromFlight(f).Code == airlineCode))
+            foreach (var flight in terminal.Flights.Values.Where(f =>
+            {
+                var airline = terminal.GetAirlineFromFlight(f);
+                return airline != null && airline.Code == airlineCode;
+            }))
             {
                 Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-15} {flight.Destination,-15} {flight.ExpectedTime,-30}");
             }
+
 
             string flightNumber;
             // Input validation for selecting a flight to modify or delete
@@ -492,63 +502,97 @@ namespace PRG2_ASSG
                 // Modify the status of the flight
                 else if (modifyOption == "2")
                 {
-                    Console.Write("Enter new Status: ");
-                    selectedFlight.Status = Console.ReadLine();
-                }
-                // Modify the special request code (handling different types of flights)
-                else if (modifyOption == "3")
-                {
-                    Console.Write("Enter new Special Request Code: ");
-                    string specialRequestCode = Console.ReadLine();
-                    if (specialRequestCode == "CFFT")
-                    {
-                        selectedFlight = new CFFTFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime,selectedFlight.Status);
-                    }
-                    else if (specialRequestCode == "DDJB")
-                    {
-                        selectedFlight = new DDJBFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
-                    }
-                    else if (specialRequestCode == "LWTT")
-                    {
-                        selectedFlight = new LWTTFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
-                    }   
-                    else
-                    {
-                        selectedFlight = new NORMFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
-                    }
-                    terminal.Flights[flightNumber] = selectedFlight;
-                }
-                // Modify the boarding gate for the flight
-                else if (modifyOption == "4")
-                {
                     while (true)
                     {
-                        Console.Write("Enter new Boarding Gate: ");
-                        string gateName = Console.ReadLine().ToUpper();
 
-                        if (string.IsNullOrEmpty(gateName) || !terminal.BoardingGates.ContainsKey(gateName))
+
+                        Console.WriteLine("Select the new status:");
+                        Console.WriteLine("1. Delayed");
+                        Console.WriteLine("2. Boarding");
+                        Console.WriteLine("3. On Time");
+                        string statusChoice = Console.ReadLine().Trim();
+
+
+
+                        if (statusChoice == "1") {
+                            selectedFlight.Status = "Delayed";
+                            break;
+                        }
+                        else if(statusChoice == "2"){
+                                selectedFlight.Status = "Boarding";
+                                break; 
+                        }
+                        else if(statusChoice == "3")
                         {
-                            Console.WriteLine("Invalid Boarding Gate. Please try again.");
+                            selectedFlight.Status = "On Time";
+                            break;
                         }
                         else
                         {
-                            // Assuming you have a property named "GateName" in BoardingGate.
-                            BoardingGate selectedGate = terminal.BoardingGates[gateName];
+                            Console.WriteLine("Invalid Input. Choose 1,2 or 3");
+                        }
+                            
+                                
+                            
+                        
+                    }
+                }
+                
 
-                            // Check if Flight property exists on BoardingGate
-                            if (selectedGate != null)
-                            {
-                                // Set the Flight for the BoardingGate
-                                selectedGate.Flight = selectedFlight;
-                                break;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Boarding Gate not found.");
-                            }
+            // Modify the special request code (handling different types of flights)
+            else if (modifyOption == "3")
+            {
+                Console.Write("Enter new Special Request Code: ");
+                string specialRequestCode = Console.ReadLine();
+                if (specialRequestCode == "CFFT")
+                {
+                    selectedFlight = new CFFTFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
+                }
+                else if (specialRequestCode == "DDJB")
+                {
+                    selectedFlight = new DDJBFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
+                }
+                else if (specialRequestCode == "LWTT")
+                {
+                    selectedFlight = new LWTTFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
+                }
+                else
+                {
+                    selectedFlight = new NORMFlight(selectedFlight.FlightNumber, selectedFlight.Origin, selectedFlight.Destination, selectedFlight.ExpectedTime, selectedFlight.Status);
+                }
+                terminal.Flights[flightNumber] = selectedFlight;
+            }
+            // Modify the boarding gate for the flight
+            else if (modifyOption == "4")
+            {
+                while (true)
+                {
+                    Console.Write("Enter new Boarding Gate: ");
+                    string gateName = Console.ReadLine().ToUpper();
+
+                    if (string.IsNullOrEmpty(gateName) || !terminal.BoardingGates.ContainsKey(gateName))
+                    {
+                        Console.WriteLine("Invalid Boarding Gate. Please try again.");
+                    }
+                    else
+                    {
+                        // Assuming you have a property named "GateName" in BoardingGate.
+                        BoardingGate selectedGate = terminal.BoardingGates[gateName];
+
+                        // Check if Flight property exists on BoardingGate
+                        if (selectedGate != null)
+                        {
+                            // Set the Flight for the BoardingGate
+                            selectedGate.Flight = selectedFlight;
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Boarding Gate not found.");
                         }
                     }
                 }
+            }
 
                 Console.WriteLine("Flight updated!");
             }
