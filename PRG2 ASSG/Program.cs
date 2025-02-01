@@ -598,7 +598,7 @@ namespace PRG2_ASSG
             Console.WriteLine("=============================================");
             Console.WriteLine("Scheduled Flights (Ordered by Earliest First)");
             Console.WriteLine("=============================================");
-            Console.WriteLine($"{"Flight Number",-15} {"Airline",-20} {"Origin",-20} {"Destination",-20} {"Expected Time",-15} {"Status",-10} {"Special Request",-15} {"Boarding Gate",-15}");
+            Console.WriteLine($"{"Flight Number",-15} {"Airline",-20} {"Origin",-20} {"Destination",-20} {"Expected Time",-15} {"Status",-10} {"Boarding Gate",-15}");
             Console.WriteLine(new string('-', 120));
 
             foreach (var flight in sortedFlights)
