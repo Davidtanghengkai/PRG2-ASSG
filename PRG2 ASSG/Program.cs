@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -671,7 +672,8 @@ namespace PRG2_ASSG
             int unassigned = 0;
             int total = terminal.Flights.Count;
             Queue<Flight> unassignedFlights = new Queue<Flight>();
-            Dictionary<Flight,string> printall = new Dictionary<Flight, string>();
+            Dictionary<string,Flight> printall = new Dictionary<string, Flight>();
+            Dictionary<Flight,string> opv = new Dictionary<Flight,string>();
             List<BoardingGate> boardedgates = new List<BoardingGate>();
 
             // Separate assigned and unassigned flights
@@ -687,8 +689,9 @@ namespace PRG2_ASSG
                         {
                             counter= true;
                             boardedgates.Add(board);
-                            printall.Add(flight,board.GateName);
-
+                            printall.Add(board.GateName, flight);
+                            opv.Add(flight, board.GateName);
+                            
                         }
     
                     }
@@ -699,8 +702,8 @@ namespace PRG2_ASSG
                     unassigned++;
                 }
             }
-
-            for (int i = 0; i < unassignedFlights.Count; i++)
+            int x = unassignedFlights.Count;
+            for (int i = 0; i < x; i++)
             {
                 var flight = unassignedFlights.Dequeue();              
                 
@@ -715,8 +718,13 @@ namespace PRG2_ASSG
                                 item.Flight = flight;
                                 boardedgates.Add(item);
 
-                                try { printall.Add(flight, item.GateName); }
+                                try  
+                                { 
+                                    printall.Add(item.GateName, flight);
+                                    opv.Add(flight, item.GateName); 
+                                }
                                 catch { }
+                                break;
                             }
                         }
                         
@@ -732,8 +740,13 @@ namespace PRG2_ASSG
                             {
                                 item.Flight = flight;
                                 boardedgates.Add(item);
-                                try { printall.Add(flight, item.GateName); }
+                                try
+                                {
+                                    printall.Add(item.GateName, flight);
+                                    opv.Add(flight, item.GateName);
+                                }
                                 catch { }
+                                break;
                             }
                         }
                     }
@@ -748,14 +761,19 @@ namespace PRG2_ASSG
                             {
                                 item.Flight = flight;
                                 boardedgates.Add(item);
-                                try { printall.Add(flight, item.GateName); }
+                                try
+                                {
+                                    printall.Add(item.GateName, flight);
+                                    opv.Add(flight, item.GateName);
+                                }
                                 catch { }
+                                break;
                                 
                             }
                         }
                     }
                 }
-                else if (flight.Status == "NORM")
+                else 
                 {
                     foreach (var item in terminal.BoardingGates.Values)
                     {
@@ -763,18 +781,30 @@ namespace PRG2_ASSG
                         {
                             item.Flight = flight;
                             boardedgates.Add(item);
-                            try { printall.Add(flight, item.GateName); }
+                            try
+                            {
+                                printall.Add(item.GateName, flight);
+                                opv.Add(flight, item.GateName);
+                            }
                             catch { }
+                            break;
+
                         }
                     }
                 }
 
-
-                Console.WriteLine($"{flight} {printall[flight]}");
+                
+                    
+                
 
             }
-
-            
+            int counters = 0;
+            Console.WriteLine($"{"Flight Number",-15} {"Origin",-20} {"Destination",-20} {"Expected Departure/Arrival time",-35} {"Special Request Code", - 25} {"Boarding Gate"}");
+            foreach (var test in printall.Values)
+            {
+                Console.WriteLine($"{test.FlightNumber,-15} {test.Origin,-20} {test.Destination,-20} {test.ExpectedTime,-35} {test.Status,-25} {opv[test]}");
+                counters++;
+            }
 
 
         }
