@@ -405,7 +405,7 @@ namespace PRG2_ASSG
             Console.WriteLine($"{"Flight Number",-15} {"Origin",-15} {"Destination",-15} {"Expected Departure/Arrival Time",-30}");
 
             // List flights for the selected airline
-            foreach (var flight in terminal.Flights.Values.Where(f => terminal.GetAirlineFromFlight(f).Code == airlineCode))
+            foreach (var flight in terminal.Flights.Values.Where(f =>terminal.GetAirlineFromFlight(f).Code == airlineCode))
             {
                 Console.WriteLine($"{flight.FlightNumber,-15} {flight.Origin,-15} {flight.Destination,-15} {flight.ExpectedTime,-30}");
             }
